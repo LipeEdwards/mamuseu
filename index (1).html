@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Museu Meris</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@400;700;800&family=Patrick+Hand&display=swap">
+<style>
+[hidden]{display:none!important}
+body{margin:0}
+img{max-width:100%}
+/* Layout: caderninho decorado. Cada sala é uma página de scrapbook com cor pastel própria, polaroids presas com fita e adesivos. Visual único e claro, de propósito. */
+:root{
+  --paper:#fff4f8;
+  --pink:#ff8fb8;
+  --pink-soft:#ffd6e6;
+  --pink-deep:#e2457f;
+  --lemon:#ffe45c;
+  --lemon-soft:#fff6b8;
+  --lilac:#e3d4ff;
+  --mint:#d4f5e4;
+  --ink:#4a2a3a;
+  --ink-soft:#8a6474;
+  --white:#ffffff;
+  --azul:#1d4fb8;
+  --f-display:"Fredoka", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --f-body:"Nunito", system-ui, sans-serif;
+  --f-hand:"Patrick Hand", "Comic Sans MS", cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  background-image:radial-gradient(var(--pink-soft) 1.6px,transparent 1.8px);background-size:22px 22px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:34px;padding-block:28px 40px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1;font-weight:700}
+.hand{font-family:var(--f-hand);font-size:1.25rem;line-height:1.3}
+
+/* Capa */
+.capa{position:relative;background:var(--white);border-radius:28px;padding:48px clamp(20px,5vw,56px) 40px;
+  border:3px solid var(--ink);box-shadow:8px 8px 0 var(--pink);display:grid;gap:18px;text-align:center;justify-items:center;overflow:hidden}
+.capa .tag{font-family:var(--f-display);font-size:.85rem;background:var(--lemon);border:2px solid var(--ink);border-radius:999px;padding:4px 14px}
+.capa h1{font-size:clamp(3rem,12vw,6.4rem);color:var(--pink-deep);letter-spacing:-.01em;
+  text-shadow:3px 3px 0 var(--lemon),5px 5px 0 var(--ink)}
+.capa .sub{max-width:52ch;font-size:1.08rem;color:var(--ink-soft);margin:0}
+.ticket{display:flex;flex-wrap:wrap;justify-content:center;background:var(--pink-soft);border:2px dashed var(--pink-deep);border-radius:16px;font-size:.9rem}
+.ticket div{padding:10px 20px;display:grid}
+.ticket div+div{border-left:2px dashed var(--pink-deep)}
+.ticket span{font-size:.75rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.ticket b{font-family:var(--f-display);font-size:1.05rem}
+.counter{font-family:var(--f-hand);font-size:1.3rem;background:var(--lemon-soft);border-radius:12px;padding:4px 14px}
+.sticker{position:absolute;pointer-events:none}
+
+/* Salas = páginas */
+.sala{position:relative;border-radius:28px;border:3px solid var(--ink);padding:40px clamp(18px,4vw,44px);
+  display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr);gap:32px;box-shadow:6px 6px 0 var(--ink)}
+@media (max-width:760px){.sala{grid-template-columns:minmax(0,1fr);gap:22px;padding-block:32px}}
+.sala.c-lemon{background:var(--lemon-soft)}
+.sala.c-lilac{background:var(--lilac)}
+.sala.c-pink{background:var(--pink-soft)}
+.sala.c-mint{background:var(--mint)}
+.sala.c-white{background:var(--white)}
+.placa{display:grid;gap:10px;align-content:start}
+.placa .num{width:56px;height:56px;border-radius:50%;background:var(--pink);border:3px solid var(--ink);display:grid;place-items:center;
+  font-family:var(--f-display);font-size:1.5rem;color:var(--white)}
+.wrap{counter-reset:sala}
+.sala{counter-increment:sala}
+.placa .num::before{content:counter(sala)}
+.placa h2{font-size:2rem}
+/* Pesquisa */
+.sala.c-pesquisa{background:var(--white);background-image:linear-gradient(rgba(150,180,230,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(150,180,230,.22) 1px,transparent 1px);background-size:24px 24px}
+.projeto{background:var(--lemon-soft);border:2px solid var(--ink);border-radius:22px;padding:20px;display:grid;gap:10px}
+.projeto .meta{font-size:.75rem;font-weight:800;color:var(--pink-deep);letter-spacing:.08em;text-transform:uppercase}
+.projeto h3{font-size:1.45rem}
+.projeto p{margin:0;max-width:62ch}
+.pilares{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.pilar{background:var(--white);border:2px solid var(--ink);border-radius:18px;padding:14px 16px;display:grid;gap:4px}
+.pilar b{font-family:var(--f-display);font-size:1.05rem}
+.pilar p{margin:0;font-size:.95rem;color:var(--ink-soft)}
+.citacao{font-family:var(--f-hand);font-size:1.45rem;line-height:1.35;background:var(--pink-soft);border-radius:18px;padding:16px 20px;border-left:6px solid var(--pink-deep);margin:0}
+.placa p{margin:0;color:var(--ink-soft)}
+.acervo{display:grid;gap:22px;min-width:0}
+
+/* Polaroid com fita */
+.peca{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:22px;align-items:center}
+@media (max-width:560px){.peca{grid-template-columns:minmax(0,1fr);justify-items:center}}
+.polaroid{position:relative;background:var(--white);padding:12px 12px 44px;border-radius:4px;box-shadow:0 8px 18px rgba(74,42,58,.18);transform:rotate(-3deg);width:100%;max-width:220px}
+.polaroid::before{content:"";position:absolute;top:-12px;left:50%;width:90px;height:26px;transform:translateX(-50%) rotate(2deg);
+  background:repeating-linear-gradient(45deg,rgba(255,143,184,.75) 0 8px,rgba(255,214,230,.75) 8px 16px);border-radius:2px}
+.polaroid .foto{position:relative;overflow:hidden;aspect-ratio:1;max-width:100%;background:var(--paper);border:2px dashed var(--pink);border-radius:2px;display:grid;place-items:center;text-align:center;padding:10px;color:var(--ink-soft);font-weight:700;font-size:.85rem}
+.polaroid .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
+.polaroid .leg{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-family:var(--f-hand);font-size:1.15rem}
+.peca:nth-of-type(even) .polaroid{transform:rotate(3deg)}
+.ficha{background:var(--white);border:2px solid var(--ink);border-radius:18px;padding:16px 18px;display:grid;gap:6px}
+.ficha .meta{font-size:.75rem;font-weight:800;color:var(--pink-deep);letter-spacing:.08em;text-transform:uppercase}
+.ficha h3{font-size:1.25rem}
+.ficha p{margin:0}
+
+/* Linha do tempo */
+.tempo{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.tempo li{background:var(--white);border:2px solid var(--ink);border-radius:18px;padding:14px 18px 14px 58px;position:relative}
+.tempo li::before{content:"♥";position:absolute;left:16px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--pink);color:var(--white);display:grid;place-items:center;font-size:.9rem}
+.tempo .ano{font-weight:800;font-size:.8rem;color:var(--pink-deep);font-variant-numeric:tabular-nums}
+.tempo h3{font-size:1.2rem;margin:2px 0}
+.tempo p{margin:0;color:var(--ink-soft)}
+
+/* Fontes primárias = bilhetinhos */
+.fontes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.fonte{background:var(--lemon);border-radius:4px;padding:18px 16px 16px;box-shadow:0 6px 12px rgba(74,42,58,.15);display:grid;gap:6px;transform:rotate(-1.5deg)}
+.fonte:nth-child(2){background:var(--pink);transform:rotate(1.5deg)}
+.fonte:nth-child(3){background:var(--white);transform:rotate(-1deg)}
+.fonte:nth-child(4){background:var(--mint);transform:rotate(2deg)}
+.arquivo.gojo{background:var(--lilac);transform:rotate(.6deg)}
+.arquivo.gojo dd{color:#3d2a8a}
+.fonte b{font-family:var(--f-display);font-size:.95rem}
+.fonte p{margin:0;font-family:var(--f-hand);font-size:1.2rem;line-height:1.3}
+
+/* Música */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.disco{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:20px;display:grid;gap:8px}
+.disco h3{font-size:1.5rem}
+.disco p{margin:0}
+.disco .pill{justify-self:start;font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;border-radius:999px;padding:3px 12px;border:2px solid var(--ink)}
+.disco.k .pill{background:var(--lilac)}
+.disco.m .pill{background:var(--mint)}
+.disco.j .pill{background:var(--lemon)}
+.disco.s .pill{background:var(--pink-soft)}
+.radio{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:20px;display:grid;gap:10px}
+.radio .pill{justify-self:start;font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;border-radius:999px;padding:3px 12px;border:2px solid var(--ink);background:var(--lemon)}
+.radio h3{font-size:1.35rem}
+.radio iframe{width:100%;height:352px;border:0;border-radius:12px;display:block}
+.radio .aviso{margin:0;font-family:var(--f-hand);font-size:1.2rem;line-height:1.3;color:var(--ink-soft);background:var(--paper);border:2px dashed var(--pink);border-radius:12px;padding:14px}
+.duo{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+/* Caprichoso */
+.sala.c-azul{background:var(--azul);color:var(--white)}
+.sala.c-azul .placa p{color:#d7e3ff}
+.sala.c-azul .placa .num{background:var(--white);color:var(--azul)}
+.estrelas{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.estrela-card{background:var(--white);color:var(--ink);border:2px solid var(--ink);border-radius:22px;padding:16px;display:grid;gap:6px}
+.estrela-card b{font-family:var(--f-display);font-size:1.1rem;color:var(--azul)}
+.estrela-card p{margin:0}
+.galera{background:rgba(255,255,255,.12);border:2px dashed var(--white);border-radius:22px;padding:18px 20px;display:grid;gap:4px}
+.galera .s{font-family:var(--f-display);font-size:clamp(1.6rem,5.5vw,2.3rem)}
+.galera .t{font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#d7e3ff}
+/* Doces */
+.saquinho{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px}
+.doce{background:var(--white);border:2px solid var(--ink);border-radius:18px;padding:14px 10px;text-align:center;display:grid;gap:6px;justify-items:center;font-weight:700;font-size:.9rem}
+.doce i{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);display:block}
+.ficha,.polaroid{color:var(--ink)}
+.jogo-doce{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:22px;display:grid;gap:16px;justify-items:center;text-align:center}
+.jogo-doce h3{font-size:1.3rem}
+.jogo-doce .dica{margin:0;color:var(--ink-soft);font-size:.95rem}
+.saco{background:none;border:0;cursor:pointer;padding:0;width:150px;height:170px;transition:transform .15s}
+.saco:hover{transform:rotate(-4deg) scale(1.04)}
+.saco.balanca{animation:balanca .45s ease}
+.saco:disabled{cursor:default;opacity:.6}
+.saco svg{width:100%;height:100%;display:block}
+@keyframes balanca{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+.saquinho .doce{animation:pula .4s ease}
+.saquinho .doce span{font-weight:400;font-size:.85rem;color:var(--ink-soft)}
+@keyframes pula{0%{transform:translateY(-30px) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+.saquinho{width:100%}
+/* Arraiá */
+.sala.c-arraia{background:var(--pink-soft);padding-top:64px}
+.bandeirinhas{position:absolute;top:0;left:0;right:0;height:46px;overflow:hidden;border-radius:25px 25px 0 0;pointer-events:none}
+.bandeirinhas svg{width:100%;height:100%;display:block}
+.convite{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:22px;display:grid;gap:14px;justify-items:center;text-align:center}
+.convite h3{font-size:1.4rem}
+.convite p{margin:0;color:var(--ink-soft)}
+.convite .botoes{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center}
+.convite .sim{font:inherit;font-weight:800;background:var(--pink);color:var(--white);border:2px solid var(--ink);border-radius:999px;padding:10px 22px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:transform .2s}
+.convite .nao{font:inherit;font-weight:700;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer}
+.convite .resposta{font-family:var(--f-hand);font-size:1.45rem;line-height:1.3;background:var(--pink-soft);border-radius:16px;padding:12px 16px;margin:0;color:var(--ink)}
+.arquivo{position:relative;background:#fbf3dc;color:var(--ink);border:2px solid var(--ink);border-radius:6px;padding:22px 20px;display:grid;gap:10px;transform:rotate(-.6deg);box-shadow:0 8px 18px rgba(74,42,58,.15)}
+.arquivo .meta{font-size:.75rem;font-weight:800;color:var(--pink-deep);letter-spacing:.08em;text-transform:uppercase}
+.arquivo h3{font-size:1.3rem}
+.arquivo dl{margin:0;display:grid;gap:0}
+.arquivo dl div{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:12px;padding:7px 0;border-bottom:1px dashed rgba(74,42,58,.35)}
+@media (max-width:460px){.arquivo dl div{grid-template-columns:minmax(0,1fr);gap:0}}
+.arquivo dt{font-weight:800;font-size:.85rem}
+.arquivo dd{margin:0;font-family:var(--f-hand);font-size:1.25rem;line-height:1.2;color:#2b4fa0}
+.arquivo p{margin:0;font-family:var(--f-hand);font-size:1.3rem;line-height:1.3}
+.carimbo{justify-self:end;transform:rotate(6deg);margin-bottom:-4px;white-space:nowrap;font-family:var(--f-display);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;color:var(--pink-deep);border:2.5px solid var(--pink-deep);border-radius:6px;padding:3px 10px;opacity:.85}
+.fim-doce{font-family:var(--f-hand);font-size:1.4rem;line-height:1.3;background:var(--pink-soft);border-radius:16px;padding:12px 16px;margin:0}
+@media (prefers-reduced-motion:reduce){.saco.balanca,.saquinho .doce{animation:none}}
+.eq{display:flex;gap:5px;align-items:flex-end;height:28px}
+.eq i{width:7px;border-radius:4px;background:var(--pink);animation:eq 1.1s ease-in-out infinite}
+.eq i:nth-child(even){background:var(--lemon)}
+.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}.eq i:nth-child(4){animation-delay:.1s}.eq i:nth-child(5){animation-delay:.3s}
+@keyframes eq{0%,100%{height:30%}50%{height:100%}}
+
+/* Tricolor */
+.faixas{height:18px;border-radius:999px;border:2px solid var(--ink);background:linear-gradient(90deg,#e0303a 0 33.3%,var(--white) 33.3% 66.6%,#1a1a1a 66.6%)}
+.placar{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:18px 20px;display:grid;gap:2px}
+.placar .t{font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft)}
+.placar .s{font-family:var(--f-display);font-size:clamp(1.8rem,6vw,2.6rem);color:#e0303a;font-variant-numeric:tabular-nums}
+
+/* Laços */
+.lacos{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.laco{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:16px;display:grid;gap:6px;justify-items:start}
+.laco svg{width:44px;height:30px}
+.laco b{font-family:var(--f-display);font-size:1.1rem}
+
+/* Quiz */
+.quiz{background:var(--white);border:2px solid var(--ink);border-radius:22px;padding:22px;display:grid;gap:14px}
+.quiz .q{font-family:var(--f-display);font-size:1.35rem}
+.opts{display:grid;gap:10px}
+.opts button{font:inherit;font-weight:700;text-align:left;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:14px;padding:12px 14px;cursor:pointer;box-shadow:3px 3px 0 var(--pink);transition:transform .12s,box-shadow .12s}
+.opts button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--pink);background:var(--lemon-soft)}
+.opts button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--pink)}
+.prog{font-weight:800;font-size:.78rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em}
+.resultado h3{font-size:2.2rem;color:var(--pink-deep)}
+.btn{font:inherit;font-weight:800;background:var(--lemon);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:10px 18px;cursor:pointer;width:fit-content;box-shadow:3px 3px 0 var(--ink)}
+button:focus-visible{outline:3px solid var(--pink-deep);outline-offset:3px}
+
+/* Carta */
+.carta{position:relative;background:var(--white);border-radius:6px;padding:clamp(26px,5vw,46px);box-shadow:0 12px 28px rgba(74,42,58,.18);
+  background-image:linear-gradient(90deg,transparent 46px,rgba(255,143,184,.5) 46px 48px,transparent 48px),linear-gradient(rgba(150,180,230,.35) 1px,transparent 1px);
+  background-size:100% 100%,100% 2em;transform:rotate(-.8deg);display:grid;gap:4px;padding-left:clamp(58px,8vw,72px)}
+.carta::before{content:"";position:absolute;top:-14px;right:30px;width:110px;height:28px;transform:rotate(-4deg);
+  background:repeating-linear-gradient(-45deg,rgba(255,228,92,.85) 0 8px,rgba(255,246,184,.85) 8px 16px)}
+.carta p{margin:0;font-family:var(--f-hand);font-size:1.45rem;line-height:2em;max-width:60ch}
+.carta .ass{font-family:var(--f-hand);font-size:1.6rem;line-height:2em;color:var(--pink-deep);font-weight:700}
+
+/* Limões */
+.limao{position:absolute;background:none;border:0;padding:2px;cursor:pointer;width:40px;height:40px;z-index:2;transition:transform .2s;animation:bob 2.6s ease-in-out infinite}
+.limao:hover{transform:rotate(-18deg) scale(1.15)}
+.limao svg{width:100%;height:100%;display:block}
+.limao.achado{opacity:.3;cursor:default;animation:none}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.recado{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(420px,calc(100vw - 32px));
+  background:var(--lemon);color:var(--ink);border:3px solid var(--ink);padding:14px 18px;border-radius:20px;box-shadow:5px 5px 0 var(--ink);display:grid;gap:2px;z-index:20}
+.recado b{font-family:var(--f-display);font-size:1.15rem}
+.recado span{font-family:var(--f-hand);font-size:1.3rem;line-height:1.3}
+footer{text-align:center;font-family:var(--f-hand);font-size:1.3rem;color:var(--ink-soft)}
+@media (prefers-reduced-motion:reduce){.eq i,.limao{animation:none}.eq i{height:70%}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="laco" viewBox="0 0 60 40"><path d="M30 20 C18 4 4 6 5 20 C4 34 18 36 30 20Z" fill="#ff8fb8" stroke="#4a2a3a" stroke-width="2.5"/><path d="M30 20 C42 4 56 6 55 20 C56 34 42 36 30 20Z" fill="#ff8fb8" stroke="#4a2a3a" stroke-width="2.5"/><ellipse cx="30" cy="20" rx="6" ry="7" fill="#e2457f" stroke="#4a2a3a" stroke-width="2.5"/></symbol>
+    <symbol id="estrela" viewBox="0 0 40 40"><path d="M20 3l5 11 12 1.5-9 8 2.6 12L20 29.5 9.4 35.5 12 23.5l-9-8L15 14z" fill="#ffe45c" stroke="#4a2a3a" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+    <symbol id="coracao" viewBox="0 0 40 36"><path d="M20 33S3 22 3 11.5C3 6 7 2.5 11.5 2.5c3.5 0 6.5 2 8.5 5 2-3 5-5 8.5-5C33 2.5 37 6 37 11.5 37 22 20 33 20 33z" fill="#ff8fb8" stroke="#4a2a3a" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<header class="capa">
+  <svg class="sticker" style="left:6%;top:22px;width:70px;height:46px;transform:rotate(-14deg)"><use href="#laco"/></svg>
+  <svg class="sticker" style="right:7%;top:30px;width:40px;height:40px;transform:rotate(12deg)"><use href="#estrela"/></svg>
+  <svg class="sticker" style="right:12%;bottom:26px;width:38px;height:34px;transform:rotate(-10deg)"><use href="#coracao"/></svg>
+  <span class="tag">Inauguração · 19 de outubro de 2026</span>
+  <h1>Museu Meris</h1>
+  <p class="sub">Um museu inteirinho sobre você, Maria Eduarda Teixeira Baia. Juntei aqui as coisas que você ama e as que eu amo em você. São 20 anos de você, e eu queria guardar tudo num lugar só ou pelo menos uma parte.</p>
+  <div class="ticket" aria-label="Ingresso">
+    <div><span>Ingresso nº</span><b>0610·19</b></div>
+    <div><span>Visitante</span><b>VIP · xuxu</b></div>
+    <div><span>Valor</span><b>Grátis pra sempre</b></div>
+  </div>
+  <span class="counter" id="contador">Tem 5 limões escondidos no museu! Achados: 0/5</span>
+</header>
+
+<section class="sala c-lemon" id="tempo">
+  <button class="limao" data-i="0" style="right:18px;top:18px" aria-label="Limão escondido"></button>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Linha do tempo</h2>
+   <p>Sua vida até aqui, do jeito que eu vejo. Só não sei dizer quando começou a fase do hiperfoco... na verdade sei sim: foi no dia em que a gente se reencontrou.</p>
+  </div>
+  <div class="acervo">
+    <ol class="tempo">
+      <li><span class="ano">19 · out · 2006</span><h3>Primeiros registros</h3><p>Nasce a Maria Eduarda. E o mundo ficou mais bonito na hora.</p></li>
+      <li><span class="ano">2006 – 2014</span><h3>Pré-história da fofura</h3><p>A fase dos primeiros laços rosa. Já dava pra ver que ia ser luz pra sempre.</p></li>
+      <li><span class="ano">c. 2013</span><h3>O primeiro arraiá</h3><p>Festa junina no Dom Bosco. A primeira vez que a gente dançou junto, e nenhum dos dois imaginava o que vinha depois.</p></li>
+      <li><span class="ano">2014 – 2025</span><h3>Era das descobertas</h3><p>Chegam o K-pop, o BTS e as sitcoms. Você assistiu Brooklyn 99 mais vezes do que eu consigo contar.</p></li>
+      <li><span class="ano">2025 – hoje</span><h3>Era UFAM</h3><p>Você entra em História na UFAM. Estuda o passado dos outros, mas pra mim a história mais bonita é a sua.</p></li>
+      <li><span class="ano">2026</span><h3>Período da Pesquisa</h3><p>Você começa sua pesquisa sobre quem construiu o Teatro Amazonas. Tem uma sala só pra ela aqui.</p></li>
+      <li><span class="ano">2026</span><h3>Período Contemporâneo: o Hiperfoco</h3><p>Jujutsu toma conta de tudo. Eu já sei mais de Jujutsu do que nunca imaginei saber.</p></li>
+    </ol>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/crianca.jpg" alt="Meris criança" onerror="this.remove()">foto dela criança aqui</div><span class="leg">a pequena Meris</span></div>
+      <div class="ficha">
+        <span class="meta">2006 · foto</span>
+        <h3>A Meris pequenininha</h3>
+        <p>A foto mais antiga do museu. Já dá pra ver esse olhar de quem vai saber a resposta de tudo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-arraia" id="arraia">
+  <div class="bandeirinhas" aria-hidden="true">
+    <svg viewBox="0 0 600 46" preserveAspectRatio="none">
+      <path d="M0 6 Q300 26 600 6" fill="none" stroke="#4a2a3a" stroke-width="2"/>
+      <g stroke="#4a2a3a" stroke-width="1.5" stroke-linejoin="round">
+        <path d="M20 8 L44 10 L32 34Z" fill="#ff8fb8"/><path d="M64 11 L88 13 L76 37Z" fill="#ffe45c"/><path d="M108 14 L132 15 L120 39Z" fill="#1d4fb8"/><path d="M152 16 L176 17 L164 41Z" fill="#7cc97a"/><path d="M196 18 L220 18 L208 42Z" fill="#e3d4ff"/><path d="M240 19 L264 19 L252 43Z" fill="#ff8fb8"/><path d="M284 19 L308 19 L296 43Z" fill="#ffe45c"/><path d="M328 19 L352 19 L340 43Z" fill="#1d4fb8"/><path d="M372 18 L396 18 L384 42Z" fill="#7cc97a"/><path d="M416 17 L440 16 L428 41Z" fill="#e3d4ff"/><path d="M460 15 L484 14 L472 39Z" fill="#ff8fb8"/><path d="M504 13 L528 11 L516 37Z" fill="#ffe45c"/><path d="M548 10 L572 8 L560 34Z" fill="#1d4fb8"/>
+      </g>
+    </svg>
+  </div>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Arraiá do Dom Bosco</h2>
+    <p>O colégio onde você cresceu, se formou e onde a nossa história começou, numa quadrilha.</p>
+    <p class="hand" style="color:var(--pink-deep)">No arraiá, você sempre foi a estrela. ★</p>
+  </div>
+  <div class="acervo">
+    <div class="ficha">
+      <span class="meta">2013 · onde tudo começou</span>
+      <h3>A quadrilha de 2013</h3>
+      <p>Lá por 2013, numa festa junina do Dom Bosco, a gente dançou junto na quadrilha. Dois pequenos, sem saber de nada. Hoje eu olho pra trás e penso que tudo começou ali.</p>
+    </div>
+    <div class="ficha" style="background:var(--lemon);position:relative">
+      <svg class="sticker" style="right:-12px;top:-16px;width:40px;height:40px;transform:rotate(14deg)"><use href="#estrela"/></svg>
+      <span class="meta">★ · a estrela</span>
+      <h3>A estrela do arraiá</h3>
+      <p>Em toda quadrilha você era a estrela. Brilhava mais que as bandeirinhas e a fogueira juntas. Não é à toa que até o seu @ no X confirma o que eu já sabia desde 2013: <b>@meristargirl</b>.</p>
+    </div>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/festa-junina.jpg" alt="Festa junina no Dom Bosco" onerror="this.remove()">foto da festa junina aqui</div><span class="leg">olha a cobra! é mentira!</span></div>
+      <div class="ficha">
+        <span class="meta">2013 · foto</span>
+        <h3>Os dançarinos</h3>
+        <p>Se a foto não existir, pode confiar em mim: era o par mais bonito do arraiá, e a estrela da festa era você.</p>
+      </div>
+    </div>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/formatura.jpg" alt="Formatura no Dom Bosco" onerror="this.remove()">foto da formatura aqui</div><span class="leg">formada!</span></div>
+      <div class="ficha">
+        <span class="meta">Formatura · foto</span>
+        <h3>A formatura</h3>
+        <p>O mesmo colégio da nossa primeira quadrilha viu você se formar. Acabou o ensino médio e começou a sua história na História. Por mais que eu tenha saído de lá, pelo menos vi o discurso mais lindo. Coincidentemente era você, e não é clubismo.</p>
+      </div>
+    </div>
+    <div class="convite">
+      <h3>Convite oficial do arraiá</h3>
+      <p>Treze anos depois, o par da quadrilha pergunta de novo:</p>
+      <p style="font-family:var(--f-display);font-size:1.25rem;color:var(--ink)">Aceita dançar comigo de novo?</p>
+      <div class="botoes" id="botoes-convite">
+        <button class="sim" id="convite-sim">Sim!</button>
+        <button class="nao" id="convite-nao">Não</button>
+      </div>
+      <p class="resposta" id="convite-resposta" hidden></p>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-pesquisa" id="pesquisa">
+  <svg class="sticker" style="right:18px;top:-18px;width:42px;height:42px;transform:rotate(-12deg)"><use href="#estrela"/></svg>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Gabinete de Pesquisa</h2>
+    <p>Essa é a sala que eu mais tenho orgulho. É onde você deixa de só estudar a história e começa a escrever ela.</p>
+  </div>
+  <div class="acervo">
+    <div class="projeto">
+      <span class="meta">PIBIC · UFAM · Pesquisa em andamento</span>
+      <h3>As mãos que ergueram o Teatro Amazonas</h3>
+      <p>Todo mundo conhece a cúpula e o luxo do Teatro Amazonas. Quase ninguém pergunta quem carregou as pedras. Sua pesquisa vai atrás das pessoas manauaras que trabalharam na construção, gente que ficou de fora das fotos e dos livros.</p>
+    </div>
+    <div class="pilares">
+      <div class="pilar"><b>A pergunta</b><p>Quem eram os trabalhadores por trás do monumento mais famoso de Manaus?</p></div>
+      <div class="pilar"><b>O olhar</b><p>História social: contar o passado a partir de quem trabalhou, e não só de quem mandou construir.</p></div>
+      <div class="pilar"><b>O porquê</b><p>Porque memória também é justiça, e Manaus merece conhecer quem a construiu de verdade.</p></div>
+    </div>
+    <p class="citacao">Isso é uma parte de você. O jeito que você se importa com quem foi esquecido diz muito sobre quem você é, e é uma das coisas que eu mais admiro.</p>
+    <div class="arquivo">
+      <span class="carimbo">Em pesquisa</span>
+      <span class="meta">Arquivo da pesquisa · Ficha nº 1896</span>
+      <h3>Ficha de trabalhador</h3>
+      <dl>
+        <div><dt>Nome</dt><dd>você vai descobrir</dd></div>
+        <div><dt>Ofício</dt><dd>pedreiro, carpinteiro, carregador...</dd></div>
+        <div><dt>Obra</dt><dd>Teatro Amazonas, Manaus</dd></div>
+        <div><dt>Período</dt><dd>1884 – 1896</dd></div>
+        <div><dt>Registro nos livros</dt><dd>quase nenhum, até agora</dd></div>
+      </dl>
+      <p>Durante mais de cem anos essa ficha ficou em branco. Agora tem alguém preenchendo.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-white" id="hiperfoco">
+  <button class="limao" data-i="1" style="left:18px;bottom:16px" aria-label="Limão escondido"></button>
+  <svg class="sticker" style="right:20px;top:-18px;width:44px;height:44px;transform:rotate(16deg)"><use href="#estrela"/></svg>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Ala do Hiperfoco</h2>
+    <p>Era pra ser uma sala temporária, mas a gente sabe que vai ficar pra sempre. Aqui moram os seus hiperfocos: Jujutsu, BTS e tudo que vira assunto por semanas.</p>
+  </div>
+  <div class="acervo">
+    <div class="fontes">
+      <div class="fonte"><b>Prova nº 1</b><p>Áudio de vários minutos me explicando um episódio inteiro, com toda a história e suas opiniões explicadas.</p></div>
+      <div class="fonte"><b>Prova nº 2</b><p>Você me explicando "Para Todos os Garotos que Eu Já Amei" inteiro, das cartinhas da Lara Jean até o final, parando em cada parte do Peter Kavinsky. Durou mais que o filme.</p></div>
+      <div class="fonte"><b>Prova nº 3</b><p>Também existe um hiperfoco no Choso, que no íncio fiquei com ciúmes, mas o cabra é foda, tenho que assumir.</p></div>
+      <div class="fonte"><b>Confissão</b><p>Eu ouvi tudo, entendi metade e achei lindo do mesmo jeito.</p></div>
+    </div>
+
+    <div class="arquivo gojo">
+      <span class="carimbo">Desejo oficial</span>
+      <span class="meta">Jujutsu · pedido registrado</span>
+      <h3>Quero ser o Gojo</h3>
+      <p>De todos os personagens de Jujutsu, você já deixou bem claro qual queria ser: o Gojo. Eu analisei o pedido e o resultado foi esse:</p>
+      <dl>
+        <div><dt>Ser a mais forte</dt><dd>confirmado ✓</dd></div>
+        <div><dt>Ser a mais bonita</dt><dd>confirmado ✓</dd></div>
+        <div><dt>Confiança de quem sabe que é incrível</dt><dd>confirmado ✓</dd></div>
+        <div><dt>Venda nos olhos</dt><dd>pendente, mas não faz falta</dd></div>
+      </dl>
+      <p>Conclusão: você não precisa virar o Gojo ou o Choso. Você já é a personagem mais forte da minha história.</p>
+    </div>
+
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/show-bts.jpg" alt="Meris no show do BTS" onerror="this.remove()">foto dela no show do BTS</div><span class="leg">ARMY em campo</span></div>
+      <div class="ficha">
+        <span class="meta">BTS · o grande dia</span>
+        <h3>O dia do show do BTS</h3>
+        <p>Você foi! Cantou todas, gritou em cada música, se emocionou e voltou sem voz. Pra mim esse dia é feriado nacional da Meris, e ver você tão feliz foi das coisas mais bonitas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-lilac" id="musica">
+  <button class="limao" data-i="2" style="right:18px;bottom:18px" aria-label="Limão escondido"></button>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Sala Musical</h2>
+    <p>Tudo que toca no seu fone, junto na mesma playlist. Dá o play e continua o passeio ouvindo.</p>
+  </div>
+  <div class="acervo">
+    <div class="duo">
+      <div class="disco k">
+        <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="pill">Ala Leste</span>
+        <h3>K-pop & BTS</h3>
+        <p>Coreografia decorada, nome de todos os integrantes na ponta da língua e opinião forte sobre cada comeback.</p>
+      </div>
+      <div class="disco m">
+        <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="pill">Ala Brasil</span>
+        <h3>MPB</h3>
+        <p>O amor da sua vida. Prova de que você tem bom gosto em dois idiomas.</p>
+      </div>
+      <div class="disco j">
+        <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="pill">Ala Especial</span>
+        <h3>Jão</h3>
+        <p>Tem uma ala só pra ele. Cada álbum é uma fase da sua vida, e cada show é um evento nacional.</p>
+      </div>
+      <div class="disco s">
+        <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="pill">Ala Pop</span>
+        <h3>Sabrina Carpenter</h3>
+        <p>Pop com brilho, deboche e refrão que gruda. Você canta cada música com a confiança de quem tá no palco, e eu concordo: você tem a mesma energia de estrela.</p>
+      </div>
+    </div>
+    <div class="radio">
+      <span class="pill">Rádio do museu</span>
+      <h3>"Em nome do que sou"</h3>
+      <p style="margin:0;color:var(--ink-soft)">A playlist que você mesma fez, agora tocando no seu museu. Não tem trilha sonora melhor pra um lugar todo sobre você.</p>
+      <div id="player-spotify"></div>
+    </div>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/musica.jpg" alt="Meris cantando" onerror="this.remove()">foto dela cantando ou num show</div><span class="leg">a voz do museu</span></div>
+      <div class="ficha">
+        <span class="meta">Ao vivo · no chuveiro</span>
+        <h3>Você cantando no chuveiro</h3>
+        <p>Não tem gravação, infelizmente. Mas eu garanto que é o melhor show da cidade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-white" id="tricolor">
+  <svg class="sticker" style="left:-14px;top:-16px;width:44px;height:40px;transform:rotate(-16deg)"><use href="#coracao"/></svg>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Sala Tricolor</h2>
+    <p>Vermelho, branco e preto. A sala da torcedora mais bonita do São Paulo.</p>
+  </div>
+  <div class="acervo">
+    <div class="faixas" aria-hidden="true"></div>
+    <div class="placar"><span class="t">Placar histórico</span><span class="s">Meris 20 × 0 Tédio</span></div>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/sao-paulo.jpg" alt="Meris com a camisa do São Paulo" onerror="this.remove()">foto dela com a camisa do São Paulo</div><span class="leg">tricolor de coração</span></div>
+      <div class="ficha">
+        <span class="meta">São Paulo · foto</span>
+        <h3>Torcedora com o manto</h3>
+        <p>Aviso: não falar de arbitragem perto dessa foto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-azul" id="caprichoso">
+  <svg class="sticker" style="right:18px;top:-20px;width:48px;height:48px;transform:rotate(14deg)"><use href="#estrela"/></svg>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Sala Caprichoso</h2>
+    <p>Azul e branco, com a estrela na testa. A sala da sua paixão pelo Boi Caprichoso de Parintins.</p>
+  </div>
+  <div class="acervo">
+    <div class="galera"><span class="t">Placar oficial</span><span class="s">Coração da Meris: 100% azul</span></div>
+    <div class="estrelas">
+      <div class="estrela-card"><b>Peça nº 1</b><p>A estrela azul, que você carrega no coração.</p></div>
+      <div class="estrela-card"><b>Peça nº 2</b><p>Toada cantada bem alto, sem errar nenhuma letra.</p></div>
+      <div class="estrela-card"><b>Peça nº 3</b><p>Regra do museu: a outra cor de boi não entra. Nem pela porta dos fundos.</p></div>
+    </div>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/caprichoso.jpg" alt="Meris de azul" onerror="this.remove()">foto dela de azul ou em Parintins</div><span class="leg">galera azulada</span></div>
+      <div class="ficha">
+        <span class="meta">Caprichoso · foto</span>
+        <h3>A torcedora azul e branca</h3>
+        <p>Junho, quando a Amazônia inteira vira festa e você canta as toadas como se estivesse na arena de Parintins. Coração azul e branco desde sempre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-pink" id="rosa">
+  <button class="limao" data-i="3" style="left:45%;top:14px" aria-label="Limão escondido"></button>
+  <svg class="sticker" style="right:16px;top:-20px;width:76px;height:50px;transform:rotate(10deg)"><use href="#laco"/></svg>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Coleção Laço Rosa</h2>
+    <p>A sala da Hello Kitty e de tudo que é fofo, igual você.</p>
+  </div>
+  <div class="acervo">
+    <div class="lacos">
+      <div class="laco"><svg><use href="#laco"/></svg><b>Peça nº 1</b><span>Coisinhas fofas juntadas ao longo dos anos. Quantidade exata: segredo.</span></div>
+      <div class="laco"><svg><use href="#coracao"/></svg><b>Peça nº 2</b><span>A palavra "xuxu", que só fica fofa assim quando é você falando.</span></div>
+      <div class="laco"><svg><use href="#estrela"/></svg><b>Peça nº 3</b><span>Limões. Muitos limões. Eu não questiono, só aceito.</span></div>
+    </div>
+    <div class="peca">
+      <div class="polaroid"><div class="foto"><img src="fotos/hello-kitty.jpg" alt="Coleção da Meris" onerror="this.remove()">foto da coleção Hello Kitty dela</div><span class="leg">relíquias rosa</span></div>
+      <div class="ficha">
+        <span class="meta">Coleção da Meris</span>
+        <h3>Relíquias rosa</h3>
+        <p>Espaço guardado pra sua coleção. Tratar com cuidado e muito amor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-lemon" id="doces">
+  <svg class="sticker" style="left:-14px;top:-16px;width:42px;height:38px;transform:rotate(-12deg)"><use href="#coracao"/></svg>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Saquinho de Cosme e Damião</h2>
+    <p>A sala dos santos gêmeos e dos Ibejis, da sua fé e da doçura que vem junto.</p>
+  </div>
+  <div class="acervo">
+    <div class="ficha">
+      <span class="meta">27 de setembro</span>
+      <h3>O saquinho mais esperado do ano</h3>
+      <p>Todo 27 de setembro é a mesma alegria: doce pra criançada, caruru e festa. E você continua com esse coração de erê, sempre pronta pra dividir o que tem.</p>
+    </div>
+    <div class="jogo-doce">
+      <h3>Seu saquinho chegou, xuxu!</h3>
+      <p class="dica" id="dica-doce">Toque no saquinho pra tirar um doce. Cada um vem com um recadinho.</p>
+      <button class="saco" id="saco" aria-label="Tirar um doce do saquinho">
+        <svg viewBox="0 0 150 170" aria-hidden="true">
+          <path d="M30 50 Q20 160 75 162 Q130 160 120 50 Z" fill="#fff6b8" stroke="#4a2a3a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M30 50 Q75 30 120 50 Q75 62 30 50Z" fill="#ffd6e6" stroke="#4a2a3a" stroke-width="3"/>
+          <path d="M44 46 q-6 -18 8 -22 q8 6 0 18" fill="#ff8fb8" stroke="#4a2a3a" stroke-width="2.5"/>
+          <path d="M106 46 q6 -18 -8 -22 q-8 6 0 18" fill="#ff8fb8" stroke="#4a2a3a" stroke-width="2.5"/>
+          <circle cx="58" cy="100" r="7" fill="#ff8fb8"/><circle cx="92" cy="92" r="6" fill="#7cc97a"/><circle cx="76" cy="125" r="7" fill="#e3d4ff"/><circle cx="100" cy="128" r="5" fill="#ffe45c" stroke="#4a2a3a" stroke-width="1.5"/><circle cx="52" cy="132" r="5" fill="#c98a4b"/>
+          <text x="75" y="80" text-anchor="middle" font-family="Patrick Hand, cursive" font-size="16" font-weight="700" fill="#4a2a3a">27/09</text>
+        </svg>
+      </button>
+      <div class="saquinho" id="doces-tirados" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sala c-mint" id="sitcoms">
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Sala das Sitcoms</h2>
+    <p>Responde aí pra descobrir qual personagem de Brooklyn 99 ou The Big Bang Theory você é.</p>
+  </div>
+  <div class="acervo">
+    <div class="quiz" id="quiz" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="sala c-lemon" id="carta">
+  <button class="limao" data-i="4" style="right:18px;top:18px" aria-label="Limão escondido"></button>
+  <div class="placa">
+    <span class="num"></span>
+    <h2>Uma carta pra você</h2>
+    <p>A última sala do museu é só minha pra você.</p>
+  </div>
+  <div class="acervo">
+    <article class="carta">
+      <p>Oi cachinhos,</p>
+      <p>Você passa os dias estudando a história dos outros, então eu quis fazer um lugar só pra guardar a sua. Cada sala aqui é um pedacinho do que eu amo em você: o jeito que você se apaixona por um anime e me conta tudo, as músicas do Jão que você canta sem medo, aquela quadrilha no Dom Bosco, o São Paulo, o Caprichoso, o rosa, os limões, as risadas com as sitcoms.</p>
+      <p>E eu morro de orgulho de ver você contando a história de quem construiu o Teatro Amazonas e ficou esquecido. Isso é muito você. Vinte anos é pouco pra tanta coisa boa. E eu fico feliz de estar aqui pra ver os próximos capítulos de perto.</p>
+      <p>Feliz aniversário. Eu te amo.</p>
+      <span class="ass">— seu namorado ♥</span>
+    </article>
+  </div>
+</section>
+
+<footer>Museu Meris · aberto 24h · entrada exclusiva pra Maria Eduarda ♥</footer>
+</div>
+
+<div class="recado" id="recado" hidden><b id="recado-t"></b><span id="recado-m"></span></div>
+
+<script>
+const limaoSVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="22" rx="15" ry="11" fill="#ffe45c" stroke="#4a2a3a" stroke-width="2.5" transform="rotate(-25 20 22)"/><path d="M29 11c2-4 7-5 8-5 0 3-3 7-7 7" fill="#7cc97a" stroke="#4a2a3a" stroke-width="2"/><circle cx="15" cy="22" r="1.4" fill="#4a2a3a"/><circle cx="23" cy="18.5" r="1.4" fill="#4a2a3a"/><path d="M17 26q3 2 6-1" fill="none" stroke="#4a2a3a" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="12.5" cy="25" rx="2" ry="1.2" fill="#ff8fb8"/><ellipse cx="26" cy="22" rx="2" ry="1.2" fill="#ff8fb8"/></svg>';
+const recados=[
+ ["Limão nº 1","Você é a pessoa mais inteligente que eu conheço. E a mais linda também."],
+ ["Limão nº 2","Pode me mandar áudio, mensagem ou ligar. Todos os dias eu vou estar aqui."],
+ ["Limão nº 3","Toda música que me lembra você."],
+ ["Limão nº 4","Você consegue deixar qualquer coisa mais fácil e mais doce."],
+ ["Limão nº 5","O aniversário não é meu, mas você é o meu maior e melhor presente."]
+];
+const achados=new Set();
+const cont=document.getElementById('contador'),rec=document.getElementById('recado');
+let timer;
+document.querySelectorAll('.limao').forEach(b=>{
+  b.innerHTML=limaoSVG;
+  b.addEventListener('click',()=>{
+    const i=+b.dataset.i;
+    achados.add(i);b.classList.add('achado');
+    document.getElementById('recado-t').textContent=recados[i][0];
+    document.getElementById('recado-m').textContent=recados[i][1];
+    rec.hidden=false;clearTimeout(timer);timer=setTimeout(()=>rec.hidden=true,6000);
+    cont.textContent=achados.size===5?'Você achou todos os limões, xuxu! 5/5 ♥':'Tem 5 limões escondidos no museu! Achados: '+achados.size+'/5';
+  });
+});
+
+// ===== MÚSICA =====
+// Cole aqui o link da playlist (ou de uma música) do Spotify, entre as aspas.
+// Exemplo: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M"
+const LINK_SPOTIFY = "https://open.spotify.com/playlist/0v0YledFHr0TmVzb7aKW3u";
+
+(function(){
+  const box=document.getElementById('player-spotify');
+  const m=LINK_SPOTIFY.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(playlist|track|album)\/([A-Za-z0-9]+)/);
+  if(!m){
+    box.innerHTML='<p class="aviso">A playlist da Meris vai tocar aqui. (Filipe: cole o link do Spotify em LINK_SPOTIFY, no final do arquivo.)</p>';
+    return;
+  }
+  const f=document.createElement('iframe');
+  f.src='https://open.spotify.com/embed/'+m[1]+'/'+m[2];
+  f.title='Playlist Em nome do que sou, no Spotify';
+  f.loading='lazy';
+  f.allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+  box.appendChild(f);
+})();
+
+const doces=[
+ ["#ff8fb8","Maria-mole","Macia igual o seu abraço."],
+ ["#c98a4b","Paçoca","O jeito que você fala é doce e tranquilo."],
+ ["#ffe45c","Suspiro","O que eu faço toda vez que você sorri."],
+ ["#7cc97a","Bala de goma","Você não sai da minha cabeça. Todos os motivos de eu ser melhor são pra você."],
+ ["#e3d4ff","Pirulito","Pra durar bastante, igual a gente."]
+];
+let tirados=0;
+const saco=document.getElementById('saco'),areaDoces=document.getElementById('doces-tirados');
+saco.addEventListener('click',()=>{
+  if(tirados>=doces.length)return;
+  const [cor,nome,msg]=doces[tirados++];
+  saco.classList.remove('balanca');void saco.offsetWidth;saco.classList.add('balanca');
+  const d=document.createElement('div');d.className='doce';
+  d.innerHTML='<i style="background:'+cor+'"></i>'+nome+'<span></span>';
+  d.querySelector('span').textContent=msg;
+  areaDoces.appendChild(d);
+  if(tirados===doces.length){
+    saco.disabled=true;
+    document.getElementById('dica-doce').textContent='Saquinho vazio!';
+    const f=document.createElement('p');f.className='fim-doce';f.style.gridColumn='1/-1';
+    f.textContent='O doce mais doce não cabe no saquinho: é você. ♥';
+    areaDoces.appendChild(f);
+  }
+});
+
+const simBtn=document.getElementById('convite-sim'),naoBtn=document.getElementById('convite-nao'),resp=document.getElementById('convite-resposta');
+const naoFrases=['Tem certeza?','Resposta inválida','O botão tá quebrado','Pensa de novo, xuxu','Não existe essa opção'];
+let naoCount=0,simTam=1;
+naoBtn.addEventListener('click',()=>{
+  naoBtn.textContent=naoFrases[naoCount%naoFrases.length];naoCount++;
+  simTam=Math.min(simTam+.25,2.2);simBtn.style.transform='scale('+simTam+')';
+  if(naoCount>=5)naoBtn.hidden=true;
+});
+simBtn.addEventListener('click',()=>{
+  document.getElementById('botoes-convite').hidden=true;
+  resp.textContent='Anarriê! Desde 2013 você é a estrela do arraiá e o meu par preferido. Vamos dançar a próxima juntos? ★♥';
+  resp.hidden=false;
+});
+
+const perguntas=[
+ {q:"Sexta à noite, o plano ideal é:",o:["Maratona de anime","Show do Jão","Jogo do São Paulo","Tudo isso ao mesmo tempo"]},
+ {q:"Junho chegou. Você vai de:",o:["Azul","Azul","Azul e branco","Caprichoso, óbvio"]},
+ {q:"Seu superpoder seria:",o:["Lembrar de todas as datas históricas","Decorar qualquer coreografia","Achar limão em qualquer lugar","Conseguir achar a melhor resposta pra tudo"]},
+ {q:"Uma frase que te define:",o:["Cool cool cool cool","Bazinga","Xuxu","Só mais um episódio"]},
+ {q:"Seu presente de aniversário perfeito:",o:["Maratona de Jujutsu com pipoca e cobertor","Ingresso pro próximo show do Jão","Um saquinho de Cosme e Damião fora de época","Um museu inteiro feito só pra você"]}
+];
+const quiz=document.getElementById('quiz');let passo=0;
+function render(){
+  if(passo>=perguntas.length){
+    quiz.innerHTML='<span class="prog">Resultado</span><div class="resultado"><h3>Você é a Meris! ♥</h3></div><p>Fiz as contas aqui e não teve jeito. Você não é Jake, nem Amy, nem Sheldon, nem Penny. Você é uma personagem original, protagonista da melhor série que eu já vi.</p><p class="hand" style="color:var(--pink-deep)">E sobre o presente perfeito: o museu você já ganhou. Os outros três, é só me chamar. ♥</p><button class="btn" id="re">Refazer o teste</button>';
+    document.getElementById('re').onclick=()=>{passo=0;render()};return;
+  }
+  const p=perguntas[passo];
+  quiz.innerHTML='<span class="prog">Pergunta '+(passo+1)+' de '+perguntas.length+'</span><div class="q"></div><div class="opts"></div>';
+  quiz.querySelector('.q').textContent=p.q;
+  const box=quiz.querySelector('.opts');
+  p.o.forEach(t=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{passo++;render()};box.appendChild(b)});
+}
+render();
+</script>
+</body>
+</html>
